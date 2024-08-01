@@ -1,4 +1,7 @@
 "use client";
+import { db } from "../firebase/firebase_init";
+import { collection, addDoc } from "firebase/firestore";
+
 import { useState } from "react";
 import {
  Fab,
@@ -12,6 +15,7 @@ import {
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -27,13 +31,36 @@ const style = {
  bgcolor: "background.paper",
  border: "2px solid #000",
  boxShadow: 24,
-
  p: 4,
 };
+
+// interface documentData {
+//  name: string;
+//  description: string;
+//  exp_date: firebase.firestore.Timestamp;
+//  purch_date: firebase.firestore.Timestamp;
+// }
+
 function AddInventoryMenu() {
+ const [itemName, setItemName] = useState("");
+ const [itemDesc, setItemDesc] = useState("");
+ const [itemExpDate, setItemExpDate] = useState<Dayjs | null>(dayjs(""));
+ const [itemPurchDate, setItemPurchDate] = useState<Dayjs | null>(dayjs(""));
+
  const [open, setOpen] = useState(true);
  const handleOpen = () => setOpen(true);
  const handleClose = () => setOpen(false);
+
+ async function addInventoryItem() {
+  const data = {
+   name: itemName,
+   description: itemDesc,
+   exp_date: itemExpDate ? itemExpDate.toDate() : null, // Convert Dayjs to Date
+   purch_date: itemPurchDate ? itemPurchDate.toDate() : null, // Convert Dayjs to Date
+  };
+
+  await addDoc(collection(db, "inventory"), data);
+ }
  return (
   <>
    {" "}
@@ -55,28 +82,56 @@ function AddInventoryMenu() {
      >
       Add Inventory
      </Typography>
+
      <IconButton
       aria-label="delete"
       sx={{ width: "fit-content", position: "absolute", top: 0, right: 0 }}
      >
-      <CloseIcon onClick={handleClose}/>
+      <CloseIcon onClick={handleClose} />
      </IconButton>
+
      <Stack sx={{ mt: 1 }} spacing={2}>
-      <TextField id="outlined-basic" label="Item Name" variant="outlined" />
+      {/* name of item text box */}
+      <TextField
+       id="outlined-basic"
+       label="Item Name"
+       variant="outlined"
+       onChange={(e) => setItemName(e.target.value)}
+      />
+
+      {/* Description Textare */}
       <TextField
        id="outlined-textarea"
        label="Description"
        placeholder="Type Here"
        rows={4}
        multiline
+       onChange={(e) => setItemDesc(e.target.value)}
       />
+
+      {/* Expiration Date picker */}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-       <DatePicker label="Expiration Date" />
+       <DatePicker
+        label="Expiration Date"
+        onChange={(newValue) => setItemExpDate(newValue)}
+       />
       </LocalizationProvider>
+
+      {/* Pruchase Date Picker */}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-       <DatePicker label="Purchase Date" />
+       <DatePicker
+        label="Purchase Date"
+        onChange={(newValue) => setItemPurchDate(newValue)}
+       />
       </LocalizationProvider>
-      <Fab color="primary" aria-label="add" sx={{ alignSelf: "end" }}>
+
+      {/* Add Inventory Button */}
+      <Fab
+       color="primary"
+       aria-label="add"
+       sx={{ alignSelf: "end" }}
+       onClick={addInventoryItem}
+      >
        <AddIcon />
       </Fab>
      </Stack>
