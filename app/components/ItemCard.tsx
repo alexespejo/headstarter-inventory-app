@@ -51,32 +51,30 @@ function ItemCard({ id, name, exp_date, purch_date, desc }: MyComponentProps) {
   await deleteDoc(doc(db, "inventory", id));
  }
  useEffect(() => {
-  let expDate = new Date(
-   exp_date.seconds * 1000 + exp_date.nanoseconds / 1000000
-  );
+  if (exp_date) {
+   let expDate = new Date(
+    exp_date.seconds * 1000 + exp_date.nanoseconds / 1000000
+   );
 
-  let readableString = expDate.toLocaleString();
-  setExpDate(
-   readableString
-    .split(" ")[0]
-    .substring(0, readableString.split(" ")[0].length - 1)
-  );
-
-  let purchDate = new Date(
-   purch_date.seconds * 1000 + purch_date.nanoseconds / 1000000
-  );
-  readableString = purchDate.toLocaleString();
-  setPurchDate(
-   readableString
-    .split(" ")[0]
-    .substring(0, readableString.split(" ")[0].length - 1)
-  );
- }, [
-  exp_date.seconds,
-  exp_date.nanoseconds,
-  purch_date.seconds,
-  purch_date.nanoseconds,
- ]);
+   let readableString = expDate.toLocaleString();
+   setExpDate(
+    readableString
+     .split(" ")[0]
+     .substring(0, readableString.split(" ")[0].length - 1)
+   );
+  }
+  if (purch_date) {
+   let purchDate = new Date(
+    purch_date.seconds * 1000 + purch_date.nanoseconds / 1000000
+   );
+   let readableString = purchDate.toLocaleString();
+   setPurchDate(
+    readableString
+     .split(" ")[0]
+     .substring(0, readableString.split(" ")[0].length - 1)
+   );
+  }
+ }, [exp_date, purch_date]);
  return (
   <>
    <Card
@@ -84,7 +82,7 @@ function ItemCard({ id, name, exp_date, purch_date, desc }: MyComponentProps) {
     sx={{
      maxWidth: 345,
      width: 250,
-     height: 300,
+     height: 250,
      overflow: "auto",
      mt: 3,
      position: "relative",

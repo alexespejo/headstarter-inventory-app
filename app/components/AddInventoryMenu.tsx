@@ -47,7 +47,7 @@ function AddInventoryMenu() {
  const [itemExpDate, setItemExpDate] = useState<Dayjs | null>(dayjs(""));
  const [itemPurchDate, setItemPurchDate] = useState<Dayjs | null>(dayjs(""));
 
- const [open, setOpen] = useState(true);
+ const [open, setOpen] = useState(false);
  const handleOpen = () => setOpen(true);
  const handleClose = () => setOpen(false);
 
@@ -60,6 +60,11 @@ function AddInventoryMenu() {
   };
 
   await addDoc(collection(db, "inventory"), data);
+  setItemName("");
+  setItemDesc("");
+  setItemExpDate(null);
+  setItemPurchDate(null);
+  handleClose();
  }
  return (
   <>
