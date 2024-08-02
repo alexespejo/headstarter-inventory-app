@@ -3,6 +3,8 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase_init";
 import { useState, useEffect } from "react";
 import {
+ Stack,
+ Chip,
  IconButton,
  Typography,
  Card,
@@ -118,7 +120,7 @@ function ItemCard({ id, name, exp_date, purch_date, desc }: MyComponentProps) {
    >
     <Box sx={style}>
      <Typography id="modal-modal-title" variant="h6" component="h2">
-      Are you sure you want to remove:{" "}
+      Delete:{" "}
       <Typography
        variant="h6"
        component="span"
@@ -126,15 +128,25 @@ function ItemCard({ id, name, exp_date, purch_date, desc }: MyComponentProps) {
       >
        {name}
       </Typography>
+      ?
      </Typography>
-     <Button
-      component="label"
-      variant="contained"
-      color="error"
-      onClick={deleteInventoryItem}
-     >
-      Yes Delete
-     </Button>
+     <Stack spacing={0.5} alignItems="center" sx={{ mt: 1 }}>
+      <Button
+       component="label"
+       variant="contained"
+       color="error"
+       onClick={deleteInventoryItem}
+       sx={{ width: "fit-content" }}
+      >
+       Yes Delete
+      </Button>
+      <Chip
+       label="Cancel"
+       variant="outlined"
+       sx={{ width: "fit-content", fontSize: 10 }}
+       onClick={handleDeleteItemModal}
+      />
+     </Stack>
     </Box>
    </Modal>
   </>
