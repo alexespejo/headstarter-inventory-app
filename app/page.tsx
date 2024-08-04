@@ -3,8 +3,10 @@ import { db } from "./firebase/firebase_init";
 import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 
+import LLM from "./components/LLM";
 import ItemCard from "./components/ItemCard";
 import AddInventoryMenu from "./components/AddInventoryMenu";
+import Recipify from "./components/Recipify";
 import {
  Skeleton,
  Container,
@@ -14,13 +16,11 @@ import {
  Paper,
  Stack,
 } from "@mui/material";
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 
 export default function Home() {
  const [value, loading, error] = useCollection(collection(db, "inventory"), {
   snapshotListenOptions: { includeMetadataChanges: true },
  });
-
  return (
   <Container>
    <Paper elevation={3}>
@@ -30,6 +30,7 @@ export default function Home() {
        Alex&apos;s Stuff
       </Typography>
 
+      <Recipify />
       <AddInventoryMenu />
      </Toolbar>
     </AppBar>
