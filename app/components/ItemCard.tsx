@@ -44,12 +44,15 @@ const style = {
 
 function ItemCard({ id, name, exp_date, purch_date, desc }: MyComponentProps) {
  const [deleteItemModal, setDeleteItemModal] = useState(false);
- const handleDeleteItemModal = () => setDeleteItemModal(!deleteItemModal);
+ const handleDeleteItemModal = () => {
+  setDeleteItemModal(!deleteItemModal);
+ };
 
  const [expDate, setExpDate] = useState("");
  const [purchDate, setPurchDate] = useState("");
 
  async function deleteInventoryItem() {
+  handleDeleteItemModal();
   await deleteDoc(doc(db, "inventory", id));
  }
  useEffect(() => {
